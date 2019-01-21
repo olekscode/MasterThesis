@@ -1,0 +1,68 @@
+\chapter{Conclusion}
+\label{chap:Conclusion}
+\mtoc
+
+We conclude this work by summarizing our discoveries, discussing their importance and talking about the potential directions of future work.
+
+\section{What we discovered}
+
+In this work we have answered the two most important questions that were stated in Section \ref{sec:Introduction-Problem}:
+
+\begin{RQ}
+  \item \textbf{Is source code of Pharo natural enough to allow us to use its regularities in machine learning models?} By measuring statistical properties of our dataset in Section \ref{sec:Naturalness-CrossEntropy} and comparing the source code of two programming languages, Pharo and Java, and different corpora of English language we have shown that programming languages have a much smaller vocabulary and introduce more domain-specific words than English texts. The source code is also highly repetitive. This suggests that applying predictive models to it can be even more effective than to natural text, and after proper preprocessing of code such applications on Pharo should not be less effective then successful experiments that were reported on Java.
+
+  \item \textbf{Does source code of a method contain enough semantic information to generate a name that would express the purpose of that method?} Although, as we have mentioned in Section \ref{sec:Introduction-Problem} programmers do not choose names for methods base on their implementation details, our model was able to generate method names with precision over 50\% when compared to real names and 14\% of generated names matching true names exactly. We also report F1 score of almost 32\% using TF-IDF model which generates names by selecting important words from source code. The high performance of both models that deduce method names exclusively from source code can be explained by high repetitiveness of code, mentioned in section \ref{sec:Naturalness-Repetitive} and the semantic information carried by identifier names (local variable names, method calls, class names).
+\end{RQ}
+
+\section{Directions of future work}
+
+\subsection{Additional features}
+
+As we have mentioned in  Section \ref{sec:Introduction-Problem}, good method names describe how they should be used (for example, sorting algorithms may have different implementation, but they are all used for sorting and called \texttt{sort}) and what actions they model (for example, the same method which moves an object from point A to point B can be called \texttt{drive} if the receiver is a \texttt{Car} or \texttt{fly} if its an \texttt{Airplane}). This suggests that in practical applications the information about class hierarchy of the receiver and the usage context such as slices of code surrounding method calls can be used as additional features for modelling method names.
+
+\subsection{Grouping packages by conceptual similarity}
+\label{sec:Conclusion-TFIDF}
+
+The effective application of TF-IDF to extracting keywords from source code demonstrated in Chapter \ref{chap:Evaluation} suggests that this simple statistical technique can be used for concept mining in software packages and classes. A list of $N$ most relevant keywords in the source code of a package will be semantically related to the concepts modelled by that package.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+  \hline
+  \textbf{Package} & \textbf{Top 5 keywords} \\
+  \hline
+  Roassal2 & shape, view, color, es, elements \\
+  Athens-Text & color, font, nn, current, fnt \\
+  Athens-Examples & canvas, paint, path, @, draw \\
+  Athens-Morphic & canvas, transform, zoom, rect, rectangle \\
+  Morphic-Core & menu, morph, bounds, event, world \\
+  Morphic-Widgets-Basic & style, color, state, button, morph \\
+  Morphic-Widgets-FastTable & row, indexes, index, scroll, rows \\
+  Math-Matrix & rows, n, matrix, row, matrices \\
+  Math-Core & n, radix, product, precision, vector \\
+  Math-Polynomials & coefficients, degree, n, remainder, quotient \\
+  Calypso-Browser & browser, navigation, items, query, tool \\
+  \hline
+\end{tabular}
+\caption{Keywords extracted from Pharo packages using TF-IDf scores}
+\end{table}
+
+Given that $V$ is the vocabulary of tokens used in source code, for every package TF-IDF will provide a numeric vector of relevance scores for every word in $V$. We can assume that packages that model similar concepts will be assigned with similar TF-IDF vectors. And by measuring the distance between those vectors (for example, cosine similarity), we can cluster software packages into groups by their conceptual similarity.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|p{9cm}|}
+  \hline
+  \textbf{Package} & \textbf{Top 5 similar packages} \\
+  \hline
+  Roassal2 & Trachel, DataFrame-Tools, Roassal2GT, Geometry, Morphic-Base \\
+  \hline
+  Geometry & Graphics-Tests, SortFunctions-Tests, Balloon-Tests, Roassal2, Trachel\\
+  \hline
+  DataFrame-Core & DataFrame-Core-Tests, DataFrame-Tools-Tests, GT-Spotter-EventRecorder, Tabular, Math-Tests-Matrix \\
+  \hline
+\end{tabular}
+\caption{Keywords extracted from Pharo packages using TF-IDf scores}
+\end{table}
+
+This would allow us to build tools for improving the consistency and conciseness on source code not on package level or entire corpus level, but on the level of groups of conceptually similar packages.

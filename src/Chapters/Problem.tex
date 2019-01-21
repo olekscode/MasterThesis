@@ -1,0 +1,51 @@
+\chapter{Problem}
+\label{chap:Problem}
+\mtoc
+
+\section{Context}
+
+In this section we discuss the importance of good naming, define what makes identifier names good, and list the causes of poor names in software systems.
+
+\subsection{Why identifier names are important?}
+
+ Concise naming allows people who read source code understand the purpose of source entities and the intentions of developers who created them. Lexical analysis of Eclipse 3.3.1 Java code base (\cite{Deis06}) revealed that 33\% of all tokens are identifiers and in terms of characters more than two thirds or 72\% of the source code consists of identifiers. This means that when we read source code, most of what we see are identifier names created by developers. Therefore, we can argue that clear identifier names are probably the most important things that make source core readable.
+
+Consider the following example of two versions of the same Smalltalk method. First version has all identifier names shortened to 1-2 characters, second one has good descriptive naming. Both methods are executable, but notice how much the readability of the method is affected by good choice of identifier names.
+
+\begin{lstlisting}
+W >> sd: s
+    (Dn i: s)
+        it: [ Sd := s ]
+        if: [ self e:
+            s, ' is not a recognised day name' ]
+\end{lstlisting}
+
+\begin{lstlisting}
+Week >> startDay: aSymbol
+    (DayNames includes: aSymbol)
+        ifTrue: [ StartDay := aSymbol ]
+        ifFalse: [ self error:
+            aSymbol, ' is not a recognised day name' ]
+\end{lstlisting}
+
+Notice also that the names include:, ifTrue:, ifFalse:, and error: are defined elsewhere but strongly affect the readability of startDay: method. The effect of identifier names is not local. One poorly chosen method name will complicate the understanding of every part of the software system which uses that method.
+
+\subsection{Reasons for bad naming}
+
+\cite{Deis06} outline three reasons for poor and inconsistent naming
+
+\begin{enumerate}
+	\item Carelesness
+	\item Limited knowledge of other names used in the system
+	\item Identifiers decay during software evolution
+\end{enumerate}
+
+\section{Problem}
+
+\subsection{Why we need automated tools?}
+
+Keeping the names concise, consistent, and up to date requires profound understanding of the whole system. For large projects it is nerly impossible, which is why we need automated tools to assist developers both in naming new entities and refactoring the  existing ones.
+
+\section{Solution in a nutshell}
+
+As we will discuss in the following chapters, the naturalness of source code allows us to generate method names by translating the body of a method to a couple of English words, which are then concatenated using a simple euristic into a valid method name.

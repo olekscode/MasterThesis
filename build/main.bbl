@@ -1,0 +1,173 @@
+\begin{thebibliography}{}
+
+\bibitem[Allamanis et~al., 2015]{Alla15}
+Allamanis, M., Barr, E.~T., Bird, C., and Sutton, C. (2015).
+\newblock Suggesting accurate method and class names.
+\newblock In {\em Proceedings of the 2015 10th Joint Meeting on Foundations of
+  Software Engineering}, pages 38--49. ACM.
+
+\bibitem[Allamanis et~al., 2016]{Alla16}
+Allamanis, M., Peng, H., and Sutton, C. (2016).
+\newblock A convolutional attention network for extreme summarization of source
+  code.
+\newblock In {\em International Conference on Machine Learning}, pages
+  2091--2100.
+
+\bibitem[Alon et~al., 2018]{Alon18}
+Alon, U., Zilberstein, M., Levy, O., and Yahav, E. (2018).
+\newblock code2vec: Learning distributed representations of code.
+\newblock {\em arXiv preprint arXiv:1803.09473}.
+
+\bibitem[Bavishi et~al., 2018]{Bavi18}
+Bavishi, R., Pradel, M., and Sen, K. (2018).
+\newblock Context2name: A deep learning-based approach to infer natural
+  variable names from usage contexts.
+\newblock {\em arXiv preprint arXiv:1809.05193}.
+
+\bibitem[Bird et~al., 2009]{Bird09}
+Bird, S., Klein, E., and Loper, E. (2009).
+\newblock {\em Natural language processing with Python: analyzing text with the
+  natural language toolkit}.
+\newblock " O'Reilly Media, Inc.".
+
+\bibitem[Black et~al., 2009]{Blac09}
+Black, A.~P., Ducasse, S., Nierstrasz, O., Pollet, D., Cassou, D., and Denker,
+  M. (2009).
+\newblock {\em Pharo by Example}.
+\newblock Square Bracket Associates, Kehrsatz, Switzerland.
+
+\bibitem[Cho et~al., 2014]{Cho14}
+Cho, K., Van~Merri{\"e}nboer, B., Bahdanau, D., and Bengio, Y. (2014).
+\newblock On the properties of neural machine translation: Encoder-decoder
+  approaches.
+\newblock {\em arXiv preprint arXiv:1409.1259}.
+
+\bibitem[Deissenboeck and Pizka, 2006]{Deis06}
+Deissenboeck, F. and Pizka, M. (2006).
+\newblock Concise and consistent naming.
+\newblock {\em Software Quality Journal}, 14(3):261--282.
+
+\bibitem[Devanbu, 2015]{Deva15}
+Devanbu, P. (2015).
+\newblock New initiative: the naturalness of software.
+\newblock In {\em Proceedings of the 37th International Conference on Software
+  Engineering-Volume 2}, pages 543--546. IEEE Press.
+
+\bibitem[Friedman et~al., 2001]{Frie01}
+Friedman, J., Hastie, T., and Tibshirani, R. (2001).
+\newblock {\em The elements of statistical learning}, volume~1.
+\newblock Springer series in statistics New York, NY, USA:.
+
+\bibitem[Gabel and Su, 2010]{Gabe10}
+Gabel, M. and Su, Z. (2010).
+\newblock A study of the uniqueness of source code.
+\newblock In {\em Proceedings of the eighteenth ACM SIGSOFT international
+  symposium on Foundations of software engineering}, pages 147--156. ACM.
+
+\bibitem[Goodfellow et~al., 2016]{Good16}
+Goodfellow, I., Bengio, Y., and Courville, A. (2016).
+\newblock {\em Deep Learning}.
+\newblock MIT Press.
+\newblock \url{http://www.deeplearningbook.org}.
+
+\bibitem[Hindle et~al., 2012]{Hind12}
+Hindle, A., Barr, E.~T., Su, Z., Gabel, M., and Devanbu, P. (2012).
+\newblock On the naturalness of software.
+\newblock In {\em Software Engineering (ICSE), 2012 34th International
+  Conference on}, pages 837--847. IEEE.
+
+\bibitem[Hochreiter et~al., 2001]{Hoch01}
+Hochreiter, S., Bengio, Y., Frasconi, P., Schmidhuber, J., et~al. (2001).
+\newblock Gradient flow in recurrent nets: the difficulty of learning long-term
+  dependencies.
+
+\bibitem[Hochreiter and Schmidhuber, 1997]{Hoch97}
+Hochreiter, S. and Schmidhuber, J. (1997).
+\newblock Long short-term memory.
+\newblock {\em Neural computation}, 9(8):1735--1780.
+
+\bibitem[Iyer et~al., 2016]{Iyer16}
+Iyer, S., Konstas, I., Cheung, A., and Zettlemoyer, L. (2016).
+\newblock Summarizing source code using a neural attention model.
+\newblock In {\em Proceedings of the 54th Annual Meeting of the Association for
+  Computational Linguistics (Volume 1: Long Papers)}, volume~1, pages
+  2073--2083.
+
+\bibitem[Jurafsky and Martin, 2009]{Jura09}
+Jurafsky, D. and Martin, J.~H. (2009).
+\newblock {\em Speech and Language Processing (2Nd Edition)}.
+\newblock Prentice-Hall, Inc., Upper Saddle River, NJ, USA.
+
+\bibitem[Knuth, 1984]{Knut84}
+Knuth, D.~E. (1984).
+\newblock Literate programming.
+\newblock {\em The Computer Journal}, 27(2):97--111.
+
+\bibitem[Kucera and Francis, 1979]{Kuce79}
+Kucera, H. and Francis, W. (1979).
+\newblock A standard corpus of present-day edited american english, for use
+  with digital computers (revised and amplified from 1967 version).
+
+\bibitem[Lahiri, 2014]{Lahi14}
+Lahiri, S. (2014).
+\newblock {Complexity of Word Collocation Networks: A Preliminary Structural
+  Analysis}.
+\newblock In {\em Proceedings of the Student Research Workshop at the 14th
+  Conference of the European Chapter of the Association for Computational
+  Linguistics}, pages 96--105, Gothenburg, Sweden. Association for
+  Computational Linguistics.
+
+\bibitem[MacKay and Mac~Kay, 2003]{Mack03}
+MacKay, D.~J. and Mac~Kay, D.~J. (2003).
+\newblock {\em Information theory, inference and learning algorithms}.
+\newblock Cambridge university press.
+
+\bibitem[Martin, 2009]{Mart09}
+Martin, R.~C. (2009).
+\newblock {\em Clean code: a handbook of agile software craftsmanship}.
+\newblock Pearson Education.
+
+\bibitem[Murphy, 2013]{Murp13}
+Murphy, K.~P. (2013).
+\newblock {\em Machine learning : a probabilistic perspective}.
+\newblock MIT Press, Cambridge, Mass. [u.a.].
+
+\bibitem[Ramos, 2003]{Ramo03}
+Ramos, J. (2003).
+\newblock Using tf-idf to determine word relevance in document queries.
+\newblock In {\em Proceedings of the first instructional conference on machine
+  learning}, volume 242, pages 133--142.
+
+\bibitem[Raychev et~al., 2015]{Rayc15}
+Raychev, V., Vechev, M., and Krause, A. (2015).
+\newblock Predicting program properties from big code.
+\newblock In {\em ACM SIGPLAN Notices}, volume~50, pages 111--124. ACM.
+
+\bibitem[Raychev et~al., 2014]{Rayc14}
+Raychev, V., Vechev, M., and Yahav, E. (2014).
+\newblock Code completion with statistical language models.
+\newblock In {\em Acm Sigplan Notices}, volume~49, pages 419--428. ACM.
+
+\bibitem[Sasaki et~al., 2007]{Sasa07}
+Sasaki, Y. et~al. (2007).
+\newblock The truth of the f-measure.
+\newblock {\em Teach Tutor mater}, 1(5):1--5.
+
+\bibitem[Shannon, 1948]{Shan48}
+Shannon, C.~E. (1948).
+\newblock A mathematical theory of communication.
+\newblock {\em Bell system technical journal}, 27(3):379--423.
+
+\bibitem[Sutskever et~al., 2014]{Suts14}
+Sutskever, I., Vinyals, O., and Le, Q.~V. (2014).
+\newblock Sequence to sequence learning with neural networks.
+\newblock In {\em Advances in neural information processing systems}, pages
+  3104--3112.
+
+\bibitem[White et~al., 2015]{Whit15}
+White, M., Vendome, C., Linares-V{\'a}squez, M., and Poshyvanyk, D. (2015).
+\newblock Toward deep learning software repositories.
+\newblock In {\em Proceedings of the 12th Working Conference on Mining Software
+  Repositories}, pages 334--345. IEEE Press.
+
+\end{thebibliography}

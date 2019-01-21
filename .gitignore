@@ -1,0 +1,11 @@
+**/*.aux 
+**/*.DS_Store
+**/*.out
+**/*.log
+**/*.synctex.gz
+**/*.blg
+**/*.lot 
+**/*.out 
+**/*.lof 
+**/*.xml 
+.Rproj.user

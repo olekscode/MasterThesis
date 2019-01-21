@@ -1,0 +1,43 @@
+\chapter{Related work}
+\label{chap:RelatedWork}
+\mtoc
+
+In this chapter, we provide an overview of research in the field of software naturalness and the application of NLP to the source code. We show how ideas that emerged from the studies of statistical properties of source code were first used for building language models for code completion and inspired later applications for improving the readability of source code. We explain how high demand for reversing the minification of JavaScript motivated research of predicting local variable names and how success in this area was adopted for a more complex problem of generating method and class names. Finally, we show how similar solutions can be made for a more challenging problem of automatically generating code documentation.
+
+% \begin{itemize}
+%  \item Improving identifier informativeness using part of speech information \cite{Bink11}
+%  \item Debugging method names \cite{Host09}
+%  \item Phrase-based statistical translation of programming languages \cite{Kara14}
+%  \item Automatic source code summarization of context for Java methods \cite{Mcbu16}
+%  \item Identifying class name inconsistency in hierarchy: a first simple heuristic \cite{Alid17}
+%  \item Deep code comment generation \cite{Hu18}
+% \end{itemize}
+
+\section{Next token in a sequence}
+
+Inspired by a paper of \cite{Gabe10} who performed the first study of the uniqueness of code and found that very few fragments of code in this very large corpus were actually unique (not repeated), \cite{Hind12} studied the predictability of such repetitions (\cite{Deva15}). By measuring cross-entropy of code in several large Java and C projects and comparing it to the cross-entropy of English measured on Brown and Gutenberg corpora, they found that source code is even more repetitive and predictable than natural languages. They claimed that this predictability allows us to model code with statistical language models and supported this claim by building an Eclipse plug-in that uses n-gram language model to predict next token in a sequence. In this paper, they introduced the software naturalness hypothesis that became the foundation for all later applications of NLP to the source code.
+
+Following this work \cite{Whit15} emphasized the usefulness of applying NLP techniques to software corpora and motivated deep learning for software language modelling. Using deep recurrent neural networks (RNN) they built their own code suggestion engine that recommends the next token given the context. Their model significantly outperformed n-gram models of \cite{Hind12} on a corpus of Java projects.
+
+\cite{Rayc14} solved a slightly different problem. Given a program with holes, they synthesized completions for holes with the most likely sequences of method calls.
+They compared RNN, 3-gram model, and the combined model built by averaging the results of the other two models which allowed them to generate sequences of calls across multiple objects together with their arguments.
+
+\section{Variable names}
+
+Most of the deployed JavaScript code gets minified by removing all unnecessary characters and replacing identifier names with short arbitrary meaningless names. This significantly reduces the size of the source code and therefore the amount of data that needs to be transferred on the Internet. It also makes the code extremely difficult to manually inspect and understand. There is a high demand for reversing the effect of minification which involves the task of generating meaningful identifier names. The most successful tools for deminifying JavaScript apply natural language processing to predict names for local variables based on code context.
+
+\cite{Rayc15} applied probabilistic graph-based models such as conditional random fields to build a prediction engine called JSNice\footnote{\url{http://jsnice.org/}} for predicting both identifier names and type annotations of variables in JavaScript.
+
+\cite{Bavi18} proposed to reverse the minification of JavaScript with a deep learning-based technique. They used an auto-encoder neural network to summarize usage contexts and a recurrent neural network to predict natural names for a given usage context. Their model had similar performance to JSNice but was an improvement in terms of efficiency.
+
+\section{Class and method names}
+
+Successful applications of NLP for automatically suggesting names for local variables inspired \cite{Alla15} to replicate those results with method and class names. Authors emphasized that unlike variable names, good method and class names need to be functionally descriptive, and therefore suggesting such names requires that the model goes beyond local context. They introduced the first neural probabilistic language model for source code which learned from a large set of hard-coded features, such as features from the containing class and the method signature. To our knowledge, this was the first probabilistic model designed for the method naming problem.
+
+In their work \cite{Alla16} considered a more general problem: given an arbitrary snippet of code — without any hard-coded features — provide a short, descriptive summary, in the form of a method name. This problem is described as extreme summarization of source code. Authors reported very good results using the convolutional neural network with attention in a simplified setting of predicting names within the scope of a single project. \cite{Alon18} reproduced this experiment but reported much lower results because they did not make the restrictive assumption of having a per-project model and trained convolutional attentional model to generate names for a method from any possible project.
+
+\cite{Alon18} learned distributed representations of source code by representing code as a collection of paths in its abstract syntax tree (AST) and aggregating these paths into a single fixed-length code vector. They used these vector representations of source code to predict a method’s name from its body. They report it as the first model to successfully predict method names based on a large, cross-project, corpus.
+
+\section{Comments and documentation}
+
+\cite{Iyer16} used LSTM networks with attention to producing sentences that describe C\# code snippets and SQL queries. They trained their model to translate between the titles of questions posted on StackOverflow and code snippets from answers that were marked as accepted.

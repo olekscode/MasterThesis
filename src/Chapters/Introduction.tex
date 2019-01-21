@@ -1,0 +1,63 @@
+\chapter{Introduction}
+\label{chap:Introduction}
+\mtoc
+
+\section{Context}
+
+The approach to programming has significantly changed in the past few decades. These days, when we write code, not only do we instruct computers what to do, we also explain other human beings who read our code what we want computers to do. \cite{Knut84} calls this approach \textit{literate programming} and goes as far as suggesting that we should consider programs to be works of literature and regard people who write them as essayists.
+
+When writing code we care about its correctness and executability, as well as its ability to solve the given problem and do it efficiently. However, we also need source code to be readable and comprehensible by programmers that will be maintaining and updating the given software system in the future. Indeed, developers spend most of their time reading the source code. According to \cite{Mart09}, the ratio of time spent reading versus writing is well over 10 to 1. Making source code easier to read decreases the cost of software development and maintenance.
+
+\cite{Deis06} show that around 72\% of source code written in Java consists of identifiers. In some languages, such as Pharo, there are no built-in elements of the syntax and user-defined names exist in the same scope as any other name in the system and can be renamed by a programmer. Which means that every token in such language, except for comments, string and number literals, is an identifier. Therefore, the quality of identifier names is the most influential factor for the readability of source code.
+
+\section{Problem}
+\label{sec:Introduction-Problem}
+
+In practice, readability of source code is often overlooked. Despite understanding the importance of having proper names, developers often choose them poorly. They are pressed by deadlines and care more about writing code that solves the given problem than making it understandable by the next developer who will be reading this code and trying to understand or modify it.
+
+But maintaining good development ethics and writing readable code is not enough to ensure that the system remains clean and comprehensive over time.  Software evolves, code gets refactored and modified, which often changes the purpose variable names, functions, and classes. This means that identifier names, especially class and method names, tend to degrade over the course of software evolution. They need to be constantly maintained and updated.
+
+This is hard because the reasoning that we use when creating names or comments goes way beyond the local context. Which means that changes in one part of the system often make names and comments of many other parts obsolete. For example, a class with a method named \texttt{withIndexDo:} may become inconsistent with other classes if their methods get renamed to \texttt{doWithIndex:}. Argument name \texttt{aNumberOrArray} will be misleading if someone renames class \texttt{Array} to \texttt{Vector}. And class \texttt{FastTable} implies the existence of a slow table and may need renaming once the performance of that other table is improved. Keeping all names of a large and evolving software system concise, consistent, and up to date requires a profound understanding of the whole system at all times. In practice, this is nearly impossible, which is why \textbf{we need automated tools to assist developers both in naming new entities and refactoring the existing ones}, tools that would allow us to test the readability of source code in the same way as we test its executability.
+
+In this work, we concentrate on conciseness of method names and study how semantic information needed to give an informative name to a method can be extracted from method's source code. Generating method names based on their bodies is, in fact, counter-intuitive because good names must be functionally descriptive (\cite{Alla15}) meaning that the good name of a method describes how and for what it should be used or what action does it model in a class hierarchy, not how it is implemented. Nevertheless, as we show in the following chapters, the source code of most methods contains a lot of semantic information closely related to the concepts modelled by the class or package to which this package belongs. We argue that probabilistic models can retrieve this semantic information and can be used to generate descriptive method names.
+
+Most work in this area has been based on Java. But just as natural language processing of structurally and morphologically different languages such as English and Chinese requires different approaches, NLP solutions applied to source code cannot be completely language invariant. In our study, we take a look at the source code of Pharo\footnote{\url{https://pharo.org/}} - a pure object-oriented programming language and a dialect of Smalltalk. Pharo is not a C-family programming language which means that its syntax is very different from languages like Java, C, or JavaScript which are studied in all related work.
+
+In this work, we exploit the naturalness of Pharo programming language to build a deep learning model that suggest better names for existing methods. Here are the two most important questions that we try to answer in our work:
+
+\begin{RQ}
+	\item Is source code of Pharo natural enough to allow us to use its regularities in machine learning models?
+	\item Does source code of a method contain enough semantic information to generate a name that would express the purpose of that method?
+\end{RQ}
+
+\section{Our approach in a nutshell}
+
+We argue that the naturalness of source code written in Pharo can be exploited to the extent when after careful preprocessing we make no difference between source code and text written in natural language. We build an attention-based sequence to sequence model and train it to translate source code of Pharo into English in the same way as it would be done with French or Chinese. By taking a sequence of source tokens as input and producing a short sequence of English words the model learns to summarize this code in few words which can be concatenated into a descriptive method name.
+
+\section{Contributions}
+
+\begin{itemize}
+	\item We explore statistical properties of source code written in Pharo and compare it to natural English texts and the code of Java.
+	\item We collect a dataset of Pharo methods and names grouped into packages and propose a novel approach to tokenization of source code.
+	\item We build an attention-based sequence to sequence model for neural machine translation of source code into English and use it to generate method names in a cross-project setting.
+	\item To our knowledge, this is the first study of software naturalness outside the C-family of programming languages and the first successful application of machine learning and natural language processing to Smalltalk code.
+\end{itemize}
+
+\section{Structure of the thesis}
+
+{\hypersetup{linkcolor=black}
+\begin{description}
+	\item [Chapter \ref{chap:RelatedWork}. \nameref{chap:RelatedWork}] \hfill \\
+	This chapter contains a detailed overview of the research around software naturalness and applications of NLP to the source code, tracing the roots of these ideas in building statistical language models and showing how they led to the use of deep learning models for generating method names and source code documentation.
+	\item [Chapter \ref{chap:Naturalness}. \nameref{chap:Naturalness}] \hfill \\
+	In this chapter, we analyse statistical properties of Pharo programming language and compare its source code to natural language corpora. We introduce the datasets that we have collected and try to understand how we should filter and preprocess source code before learning.
+	\item [Chapter \ref{chap:TranslatingCode}. \nameref{chap:TranslatingCode}] \hfill \\
+	Here we describe our solution that exploits the naturalness of Pharo to generate method names by translating source code into English. We explain how we collected the dataset and emphasize the process of data preparation which we find to be most important for the performance of a model. We then define the architecture of our model and show some examples of method names that it generated.
+	\item [Chapter \ref{chap:Evaluation}. \nameref{chap:Evaluation}] \hfill \\
+	In this chapter, we do a careful evaluation of generated names using different numeric metrics for automatic evaluation. We report those results and compare them to the selected baselines.
+	\item [Chapter \ref{chap:Conclusion}. \nameref{chap:Conclusion}] \hfill \\
+	We conclude this work by summarizing our discoveries, discussing their importance and talking about the potential directions of future work.
+	\item [Appendix \ref{chap:Background}. \nameref{chap:Background}] \hfill \\
+	Here we provide a brief introduction to the most important concepts of machine learning and natural language processing required for understanding this thesis. If you are relatively new to those fields, take a look at this appendix before reading the following chapters.
+\end{description}
+}

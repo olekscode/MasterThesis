@@ -1,0 +1,204 @@
+\chapter{Naturalness of Pharo}
+\label{chap:Naturalness}
+\mtoc
+
+In this chapter, we briefly discuss the idea of software naturalness and try to understand how similar is source code written in Pharo both to the natural English texts and to the programming languages that were studied in other literature. We describe how we collected the dataset of Pharo methods which we will use in Chapter \ref{chap:TranslatingCode} to train a neural machine translation model. For the comparison, we have also collected similar dataset of Java methods and used two public corpora of English texts. We use those datasets to explore differences between Pharo, Java, and English, emphasizing on the vocabulary that is used in those languages, size of basic units such as sentences in English and methods in the source code, and repetitiveness of those units.
+
+\section{Software naturalness}
+
+The concept of software naturalness was first introduced by \cite{Hind12}. It states that
+
+\begin{quote}
+Programming languages, in theory, are complex, flexible, and powerful, but "natural" programs, the ones that real people actually write, are mostly simple and rather repetitive; thus they have usefully predictable statistical properties that can be captured in statistical language models and leveraged for software engineering tasks.
+\end{quote}
+
+\cite{Hind12} demonstrate the repetitiveness of software by training the n-gram model to predict the next token in a sequence and comparing cross-entropy of this model over several Java and C++ projects as well as the two English corpora. Authors claim that source code is more regular and repetitive than natural English and those properties of code can be exploited by probabilistic models to assist traditional software analysis tools. As we have seen in Chapter \ref{RelatedWork}, there have been many successful application of those ideas, most recent of which (\cite{Alla16}, \cite{Iyer16}) use end-to-end deep learning approaches to describe source code with natural text in the same way as we summarize news articles or translate books.
+
+The naturalness of software means that source code is predictable to the extent to which human beings who write it are predictable. From a certain point of view, programming languages are not so different from other languages that we use to communicate our ideas. Following this assumption, we can take the same models that have proved to be successful in modelling natural languages and apply them to the source code.
+
+Nevertheless, it is also essential to understand how different is source code from natural languages and also, how different is the source code of Pharo from that of Java, which was studied in most related work. Understanding these differences is important to accurately collect and prepare the dataset that can be used for training the model. As we show in chapter \ref{chap:TranslatingCode} after careful preprocessing of source code, in some problem settings, we can treat it as another natural language and apply to it the same models that are used for translating English to French or Spanish to German.
+
+\section{Collecting and filtering methods}
+\label{sec:Naturalness-Data}
+
+In this section, we describe two datasets of source code that we have collected for Pharo and Java programming languages, as well as the public corpora of English texts that we use in our comparative analysis.
+
+\subsection{Dataset of Pharo methods}
+\label{sec:Naturalness-DataPharo}
+
+We have collected a dataset of $132,046$ methods from $10$ biggest Smalltalk projects. In Table \ref{tab:Naturalness-DataPharo} you can find the list of those projects together with commit SHA from which each project was loaded and the counts of packages, classes, and methods in each project. Methods of different classes often have the same names, but we counted unique methods and not method names.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|r|r|r|}
+\hline
+\textbf{Project} & \textbf{Commit} & \textbf{Packages} & \textbf{Classes} & \textbf{Methods} \\
+\hline
+Moose     & 57cb811 & 224 & 4,199 & 59,784 \\
+GToolkit  & b465367 & 110 & 961   & 15,072 \\
+Roassal2  & dfcf44d & 35  & 922   & 12,320 \\
+Bloc      & bff10d5 & 37  & 990   & 11,790 \\
+Seaside   & 0724b99 & 55  & 855   & 11,184 \\
+Iceberg   & b05fb25 & 28  & 524   & 6,459 \\
+Spec      & 64829bb & 28  & 400   & 5,992 \\
+PolyMath  & 52662a7 & 56  & 294   & 4,078 \\
+Voyage    & ef3e6aa & 19  & 95    & 2,867 \\
+Telescope & 09033b3 & 11  & 143   & 2,500 \\
+\hline
+\textbf{Total:}     & ---     & \textbf{510} & \textbf{8,318} & \textbf{132,046} \\
+\hline
+\end{tabular}
+\caption{Pharo projects collected into our dataset. Only non-empty methods, packages, and classes are included}
+\label{tab:Naturalness-DataPharo}
+\end{table}
+
+Pharo does not have namespaces, so all classes exist in a global context and must have unique names. Every method and every class in Pharo (including classes like \texttt{Object}, \texttt{Class}, \texttt{Smalltalk}, \texttt{Integer} and methods such as \texttt{new}, \texttt{superclass}, \texttt{assert:} that would be considered \textit{"built-in"} in other languages). Many packages add their own methods to classes such as \texttt{String} or \texttt{Integer}. When certain package $X$ is adding methods to external classes, this is called \textit{"extending the class"}, added methods are stored inside package $X$ and loaded together with it. This means that methods of certain classes are distributed among different packages. For example, every project in our dataset extends classes of package \texttt{Kernel} with its own methods. We count them in the following way: each row of Table \ref{tab:Naturalness-DataPharo} contains the number of unique methods defined by the corresponding project, as well as the number of unique packages and classes to which methods of this project belong. And the bottom row contains the unique number of packages, classes, and methods in the whole dataset. This explains why total counts of packages and classes in the bottom row are lower than the sum of numbers in the corresponding columns.
+
+We have also excluded all methods that do not have the source code. There are many methods in class hierarchies that override superclass methods with an empty body and a comment such as \textit{"Do nothing"}. This is a study of source code in which we do not take features like class hierarchy into account. Therefore, we have removed all empty methods from the dataset.
+
+All source code was tokenized first into tokens: identifier names, literals parentheses etc. and then into subtokens: individual identifier names were split into words based on camel case notation, such that \texttt{OrderedCollection} becomes two words (subtokens) \texttt{ordered} and \texttt{collection}. Method names were also tokenized on a subtoken level because, as you will see in the following chapter, we will be learning to generate names word by word. Class and package names were not tokenized and left as-is just for grouping method name-body pairs into categories and being able to find each method in Pharo image. Tokenization of source code and method names will be discussed in more details in Chapter \ref{chap:TranslatingCode} as it is closely related to the presented approach to generating names.
+
+\subsection{Dataset of Java methods}
+\label{sec:Naturalness-DataJava}
+
+Additionally, we have collected $136,811$ methods from $9$ Java repositories. The selection of Java projects was based on the work of \cite{Hind12} who selected 10 Java projects for the study of software naturalness. We have collected source code from 9 of those 10 projects but loaded them from the most recent commits.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|r|r|}
+\hline
+\textbf{Project} & \textbf{Commit} & \textbf{Classes} & \textbf{Methods} \\
+\hline
+lucene-solr & 4d23ca2 & 6,891  & 60,229 \\
+cassandra   & 3dcde08 & 2,258  & 25,340 \\
+ant         & 25de4f2 & 1,137  & 13,051 \\
+batik       & 289f228 & 1,332  & 12,374 \\
+xerces2-j   & fa002ac & 608    & 8,410 \\
+xalan-j     & cba6d7f & 764    & 8,235 \\
+maven-3     & 3339789 & 539    & 4,499 \\
+log4j       & 7be00ee & 274    & 2,403 \\
+maven-2     & 1243643 & 267    & 2,270 \\
+\hline
+\textbf{Total:}       & ---     & \textbf{14,070} & \textbf{136,811} \\
+\hline
+\end{tabular}
+\caption{Java projects collected into our dataset. Only non-empty methods and classes were included. We removed constructors because they have the same name as class}
+\label{tab:Naturalness-DataJava}
+\end{table}
+
+In Table \ref{tab:Naturalness-DataJava} you can see the list of those projects together with commit SHA from which they were loaded and numbers of unique classes and methods in each project. Unlike Pharo, Java allows methods overloading - having more than one method with the same hame if their argument list is different. For that reason, numbers presented in the table are not just counts of unique method names, but of unique class - method - implementation (source code) combinations. Java does not allow extending classes from external packages, so the total counts of methods and classes in our dataset, presented in the bottom row of the table, are equal to the sum of those counts in individual packages.
+
+Constructors in Java classes have the same names as those classes. Since we are interested primarily in the mapping of source code to a method name, we have removed constructors from Java dataset to make sure that the problem of generating method names is not mixed with the problem of generating class names which is similar but requires different approaches.
+
+Similarly to what we did with the dataset of Pharo methods discussed in Section \ref{sec:Naturalness-DataJava}, source code and names of Java methods were tokenized on a subtoken level, and class names were preserved in their original state\footnote{Tokenization of source code written in Pharo was done by writing a visitor for the abstract syntax tree (AST) of each method. Using JavaParser provided by Moose, we acquired AST for every method in Java as well and wrote a similar visitor for those trees. The code of both visitors we used for code tokenization can be found in this repository: \url{https://github.com/olekscode/CodeTokenizer/}}.
+
+\subsection{English corpora}
+\label{sec:Naturalness-DataEnglish}
+
+To compare source code to natural English, we used two of the most widely used oper corpora of English texts. Both corpora were loaded from NLTK (Natural Language Toolkit) Platform (\cite{Bird09}):
+
+\begin{description}
+  \item [The Brown Corpus] (The Standard Corpus of Present-Day Edited American English) - the first computer-readable general corpus of texts prepared for linguistic research on modern English. It contains 500 samples of English texts printed in the United States during the year 1961 (\cite{Kuce79}) The version provided by NLTK includes all 500 texts.
+  \item [Gutenberg Dataset] - a collection of 3,036 English books written by 142 authors. Those books were manually cleaned to remove metadata, license information, and transcribers' notes (\cite{Lahi14}). We use the subset of the Gutenberg Dataset provided by NLTK, which contains 18 books from 12 different authors.
+\end{description}
+
+\section{Limited vocabulary}
+\label{sec:Naturalness-Vocabulary}
+
+Unlike natural languages which have the predefined set of words, programming languages allow us to use any sequence of alphanumeric characters (usually with a condition that the first character must not be a number) as identifier names. And since on a character level more than 72\% of the source code consists of identifiers (\cite{Deis06}), there is a large degree of freedom, and we have strong reason to believe that the vocabulary of tokens will be very large.
+
+In practice, however, programmers follow the convention of using names that are the concatenation of several English words such as \texttt{OrderedCollection} or \texttt{numberOfMissingValues}. This makes names descriptive and introduces semantics into the source code, making it more similar to natural languages.
+
+As it was mentioned in Section \ref{tab:Naturalness-DataPharo} and will be explained in more details in Section \ref{sec:TranslatingCode-Data}, we have split tokens such as \texttt{ifFalse:} into lowercase subtokens \texttt{if}, \texttt{false}, and \texttt{:}. This allows us to study the vocabulary of actual English words that are used in source code. In Table \ref{tab:Naturalness-Vocabulary} we compare the vocabularies of English words used in Pharo, Java, Gutenberg, and Brown corpora. Word is defined as a sequence of alphabetic characters (a-z or A-Z), meaning that special symbols like \texttt{\{}, \texttt{[}, \texttt{:} were excluded from the study and from the list of tokens \texttt{if}, \texttt{false}, \texttt{:} only \texttt{if} and \texttt{false} we counted. We have put this restriction because we are only interested in subtokens that have semantic meaning and do not want our numbers to be skewed by punctuation. The first row shows the total number of words in each dataset. In second row you can see the number of unique words, and in the third row - the proportion of unique words to the total number of words.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|r|r|r|r|}
+  \hline
+                     & Gutenberg & Brown   & Pharo     & Java \\
+  \hline
+  Total words        & 2,135,400 & 981,716 & 2,605,330 & 6,223,002 \\
+  \hline
+  Unique words       & 50,286    & 46,185  & \textbf{6,415}     & 13,516  \\
+  \hline
+  \% of unique words & 2.35\%    & 4.70\%  & 0.25\%    & 0.22\%  \\
+  \hline
+\end{tabular}
+\caption{Comparison of the vocabulary sizes used in programming languages and English corpora}
+\label{tab:Naturalness-Vocabulary}
+\end{table}
+
+Considering the freedom programmers have when choosing identifier names, it is surprising how little words they actually use. One might argue that many tokens in source code are non-alphabetic characters such as brackets and braces. But keep in mind that we are counting only the \textbf{unique} occurrences of each word. The total count of unique non-alphabetic subtokens in all methods from our dataset is only 62 for Pharo and 48 for Java. This can be explained by the striving of developers to choose names that are consistent with existing names in the system. Using a wide variety of synonyms for referring to similar concepts or using words that have many different meaning is makes natural language rich and resourceful, but it is not considered a good practice in programming.
+
+\section{Specialized vocabulary}
+\label{sec:Naturalness-SpecializedVocabulary}
+
+Another thing that distinguishes language used in source code from regular English is the high frequency of neologisms. Programmers often use words specific to the domain of their project. In Table \ref{tab:Naturalness-Novelties} we show the number of unique words in Pharo and Java distributed among projects and what percent of those unique words are novelties - words that only appear in this project and never in other ones. We can draw two conclusions from those numbers. First of all, it is amazing how much domain-specific language is used in some projects. It can be an interesting direction for future work to study the nature and semantic similarity of those novel words. Another interesting observation is that numbers of unique words in source code corpora are not size-invariant. In second and third rows of Table \ref{tab:Naturalness-Vocabulary} we saw that the number of unique words in natural English corpora is close to 50,000 both in a larger and smaller corpus. For Pharo and Java, it is different: larger corpus has more unique words. This could be explained by the higher semantical richness of Java, but now we can see from Table \ref{tab:Naturalness-Novelties} that every project introduces many novel words. We assume that the size of unique words used in source code corpora will grow linearly together with the number of projects.
+
+\begin{table}[H]
+\begin{tabular}{|l|p{1.5cm}|p{2cm}|}
+\hline
+\textbf{Project} & \textbf{Unique words} & \textbf{\% of novel words} \\
+\hline
+Moose     & 4,632   & 19.65\% \\
+PolyMath  & 1,656   & 19.08\% \\
+Seaside   & 2,590   & 9.50\% \\
+Bloc      & 2,456   & 9.41\% \\
+GToolkit  & 3,144   & 9.26\% \\
+Iceberg   & 1,686   & 6.70\% \\
+Spec      & 1,847   & 5.58\% \\
+Telescope & 1,224   & 3.59\% \\
+Voyage    & 1,544   & 2.53\% \\
+Roassal2  & 2,790   & 0.04\% \\
+\hline
+\end{tabular}
+\quad\quad
+\begin{tabular}{|l|p{1.5cm}|p{2cm}|}
+\hline
+\textbf{Project} & \textbf{Unique words} & \textbf{\% of novel words} \\
+\hline
+lucene-solr & 8,023   & 47.91\% \\
+batik       & 3,640   & 31.73\% \\
+cassandra   & 4,548   & 28.03\% \\
+xalan-j     & 2,632   & 27.47\% \\
+ant         & 3,468   & 26.70\% \\
+xerces2-j   & 2,322   & 21.83\% \\
+log4j       & 1,273   & 10.45\% \\
+maven-3     & 1,481   & 6.14\% \\
+maven-2     & 1,222   & 2.62\% \\
+& & \\
+\hline
+\end{tabular}
+\caption{Novel words used in the source code of different software project of Pharo (left table) and Java (right table). Second column shows the number of unique words in each project and second column - the percent of those that never appear in other projects}
+\label{tab:Naturalness-Novelties}
+\end{table}
+
+People who come up with method names use specialized technical vocabulary, often even domain-specific vocabulary related to the project they are working on. Words like \texttt{node}, \texttt{tree}, \texttt{leaf}, \texttt{root} that are very common in computer science usually mean something different in texts written in plain English. Words that are usually used as verbs in a past tense, for example \texttt{updated}, \texttt{sorted}, \texttt{translated} almost always have adjective meaning in source code. This problem makes it ineffective to use many corpus-based NLP tools that were trained on natural texts, including word embeddings and tools for PoS tagging, relationship extraction, or word sense disambiguation. To perform well of a specialized vocabulary of source code, those tools must be redesigned and trained on big code corpora.
+
+% \begin{table}[H]
+% \centering
+% \begin{tabular}{|l|l|l|}
+%   \hline
+%   Pharo code & Holy Bible & Reuters News \\
+%   \hline
+% self & the & the \\
+% a & and & of \\
+% if & of & to \\
+% new & to & in \\
+% assert & that & and \\
+% class & in & said \\
+% true & he & a \\
+% at & shall & mln \\
+% nil & unto & vs \\
+% stream & for & for \\
+%   \hline
+% \end{tabular}
+% \caption{Top 10 words used most frequently in selected corpora}
+% \end{table}
+
+\section{Repetitive code}
+\label{sec:Naturalness-Repetitive}
+
+The source code is much more repetitive than natural language. While writers in English try to use their own unique style and copying the work of others is criticized as plagiarism, developers are encouraged to reuse certain patterns and follow the same conventions that are adopted by most people in the specific community. Conventions that are considered to be good practices and help us better understand the code written by others. On a high level this repetitiveness can be observed as the number of methods that have exactly the same name and implementation in different classes. In Section \ref{sec:TranslatingCode-Data} we explain why we remove duplicate method name -- source code pairs from our dataset. Because many classes have the same methods with the same implementation (such as method \texttt{name} implemented as \lstinline{^ name}) we have removed a large portion of methods from Pharo dataset as duplicates.
+
+On the lower level, developers try to follow certain conventions in how they choose identifier names (for example, test methods start with the word \texttt{test} and prefix \texttt{is} identifies that the variable or method is boolean), how they implement their algorithms (for example, Pharo programmers try to avoid if statements and use double dispatch instead). Repetitive behaviour of many programmers expressed in those small details creates patterns in the source code that deep learning models can recognize and use as features for themselves.
